@@ -6,8 +6,8 @@ import { ref } from 'vue'
 const direction = ref('vertical')
 const itemGap = ref(9)
 const itemCount = ref(10)
-const scaleStartPercent = ref(0.95)
-const translateFactor = ref(50)
+const scaleStartPercent = ref(0.85)
+const translateFactor = ref(120)
 const spacerEnabled = ref(false)
 </script>
 
