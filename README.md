@@ -1,2 +1,2 @@
-# scroll-slide
+# scroll-slides
  
