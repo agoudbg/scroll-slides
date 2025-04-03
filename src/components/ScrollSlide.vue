@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted, computed, watch, onUnmounted } from 'vue';
 
 // Define component props
 const props = defineProps({
@@ -100,20 +100,46 @@ const handleScroll = () => {
   });
 };
 
-// Initialize after component is mounted
-onMounted(() => {
+// Reinitialize item list and states
+const initializeItems = () => {
   if (sliderRef.value) {
     items.value = Array.from(sliderRef.value.querySelectorAll('.slider-item'));
 
     // Initialize states for all items
-    items.value.forEach((_, index) => {
-      itemStates[index] = {
-        scale: 1,
-        translate: 0,
-        opacity: 1,
-      };
+    itemIndices.value.forEach(index => {
+      if (!itemStates[index]) {
+        itemStates[index] = {
+          scale: 1,
+          translate: 0,
+          opacity: 1,
+        };
+      }
     });
 
+    // Remove states for items that no longer exist
+    Object.keys(itemStates).forEach(key => {
+      const index = Number(key);
+      if (index >= props.itemCount) {
+        delete itemStates[index];
+      }
+    });
+
+    // Trigger initial calculation
+    handleScroll();
+  }
+};
+
+// Watch for changes in item count
+watch(() => props.itemCount, (_newCount, _oldCount) => {
+  // Use setTimeout to ensure DOM has updated
+  setTimeout(() => {
+    initializeItems();
+  }, 0);
+}, { immediate: false });
+
+// Initialize after component is mounted
+onMounted(() => {
+  if (sliderRef.value) {
     // Add scroll event listener
     sliderRef.value.addEventListener('scroll', handleScroll);
 
@@ -123,9 +149,18 @@ onMounted(() => {
     // Add touch event listener for mobile devices
     sliderRef.value.addEventListener('touchmove', handleScroll, { passive: true });
 
-    // Trigger initial calculation
-    handleScroll();
+    // Initialize items
+    initializeItems();
   }
+});
+
+// Clean up event listeners when component is unmounted
+onUnmounted(() => {
+  if (sliderRef.value) {
+    sliderRef.value.removeEventListener('scroll', handleScroll);
+    sliderRef.value.removeEventListener('touchmove', handleScroll);
+  }
+  window.removeEventListener('resize', handleScroll);
 });
 </script>
 
