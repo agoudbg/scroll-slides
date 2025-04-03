@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import ScrollSlide from './components/ScrollSlide.vue'
+import { ref } from 'vue'
+
+// 为第二个示例添加设置
+const direction = ref('vertical')
+const itemGap = ref(9)
+const itemCount = ref(10)
+const scaleStartPercent = ref(0.95)
+const translateFactor = ref(50)
 </script>
 
 <template>
@@ -117,44 +125,51 @@ import ScrollSlide from './components/ScrollSlide.vue'
     </ScrollSlide>
 
     <h2>Vertical</h2>
-    <ScrollSlide direction="vertical" :itemGap="9" :itemCount="10"
-      style="height: 600px; overflow-y: auto; border: 1px solid #999999;">
-      <template #item="{ index }">
-        <div style="
-            width: 100%;
-            height: 100px;
-            margin-bottom: 9px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #ffffff66;
-            box-shadow: 0 2px 10px #0000001a;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 12px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          ">
-          Item {{ index + 1 }}
-        </div>
-      </template>
-    </ScrollSlide>
+    <div class="settings-panel">
+      <div class="setting-item">
+        <label>Direction:</label>
+        <select v-model="direction">
+          <option value="vertical">vertical</option>
+          <option value="horizontal">horizontal</option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <label>Gap:</label>
+        <input type="number" v-model.number="itemGap" min="0" max="50" />
+      </div>
+      <div class="setting-item">
+        <label>Item count:</label>
+        <input type="number" v-model.number="itemCount" min="1" max="20" />
+      </div>
+      <div class="setting-item">
+        <label>Scale start percent:</label>
+        <input type="number" v-model.number="scaleStartPercent" min="0.5" max="1" step="0.05" />
+      </div>
+      <div class="setting-item">
+        <label>Translate factor:</label>
+        <input type="number" v-model.number="translateFactor" min="0" max="100" />
+      </div>
+    </div>
 
-    <h2>Horizontal</h2>
-    <ScrollSlide direction="horizontal" :itemGap="9" :itemCount="15"
-      style="width: 100%; overflow-x: auto; border: 1px solid #999999;">
+    <ScrollSlide :direction="direction" :itemGap="itemGap" :itemCount="itemCount"
+      :scale-start-percent="scaleStartPercent" :translate-factor="translateFactor" :style="direction === 'vertical'
+        ? 'height: 600px; overflow-y: auto; border: 1px solid #999999;'
+        : 'width: 100%; height: 200px; overflow-x: auto; border: 1px solid #999999;'">
       <template #item="{ index }">
-        <div style="
-            width: 200px;
-            height: 100px;
-            background-color: #f0f0f055;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          ">
+        <div :style="{
+          width: direction === 'vertical' ? '100%' : '200px',
+          height: direction === 'vertical' ? '100px' : '120px',
+          marginBottom: direction === 'vertical' ? itemGap + 'px' : '0px',
+          marginRight: direction === 'horizontal' ? itemGap + 'px' : '0px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#ffffff66',
+          boxShadow: '0 2px 10px #0000001a',
+          backdropFilter: 'blur(10px)',
+          webkitBackdropFilter: 'blur(10px)',
+          borderRadius: '15px',
+        }">
           Item {{ index + 1 }}
         </div>
       </template>
@@ -168,5 +183,33 @@ import ScrollSlide from './components/ScrollSlide.vue'
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.settings-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.setting-item label {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.setting-item input,
+.setting-item select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 </style>
