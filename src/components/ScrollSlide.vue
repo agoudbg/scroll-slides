@@ -24,6 +24,15 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
+  allowScrollToFirst: {
+    type: Boolean,
+    default: false,
+  },
+  // Updating prop name to be clearer
+  spacerEnabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Configure slider container and items
@@ -137,6 +146,27 @@ watch(() => props.itemCount, (_newCount, _oldCount) => {
   }, 0);
 }, { immediate: false });
 
+// Auto-calculate spacer size based on viewport, minus the first item height
+const spacerSize = computed(() => {
+  if (!sliderRef.value) return 0;
+
+  const viewportSize = sliderRef.value[isVertical.value ? 'clientHeight' : 'clientWidth'];
+
+  // Get the first item's size if available
+  let firstItemSize = 0;
+  if (items.value.length > 0) {
+    const firstItem = items.value[0];
+    if (firstItem) {
+      const rect = firstItem.getBoundingClientRect();
+      firstItemSize = isVertical.value ? rect.height : rect.width;
+    }
+  }
+
+  // The spacer should be the size of the viewport minus the first item's size
+  // to allow precise positioning of the first element
+  return Math.max(0, viewportSize - firstItemSize);
+});
+
 // Initialize after component is mounted
 onMounted(() => {
   if (sliderRef.value) {
@@ -166,6 +196,12 @@ onUnmounted(() => {
 
 <template>
   <div class="slider" ref="sliderRef" :class="{ 'horizontal': !isVertical }">
+    <!-- Add a spacer element at the beginning to allow scrolling with first item at the top/left -->
+    <div v-if="spacerEnabled" class="slider-spacer" :style="isVertical
+      ? { height: `${spacerSize}px`, minHeight: `${spacerSize}px` }
+      : { width: `${spacerSize}px`, minWidth: `${spacerSize}px`, display: 'inline-block' }">
+    </div>
+
     <div v-for="index in itemIndices" :key="index" class="slider-item" :style="{
       zIndex: itemIndices.length - index,
     }">
@@ -179,6 +215,8 @@ onUnmounted(() => {
         </slot>
       </div>
     </div>
+
+    <!-- Remove the end spacer as we're using the beginning spacer now -->
   </div>
 </template>
 
@@ -211,5 +249,9 @@ onUnmounted(() => {
   display: inline-block;
   vertical-align: middle;
   transform-origin: center right;
+}
+
+.slider-spacer {
+  pointer-events: none;
 }
 </style>

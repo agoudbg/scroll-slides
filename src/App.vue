@@ -8,6 +8,7 @@ const itemGap = ref(9)
 const itemCount = ref(10)
 const scaleStartPercent = ref(0.95)
 const translateFactor = ref(50)
+const spacerEnabled = ref(false)
 </script>
 
 <template>
@@ -17,7 +18,7 @@ const translateFactor = ref(50)
     <h2>Independent Templates</h2>
     <ScrollSlide direction="horizontal" :itemGap="15" :itemCount="15"
       style="width: 100%; overflow-x: auto; border: 1px solid #999999; margin-bottom: 40px;" :scale-start-percent="0.95"
-      :translate-factor="50">
+      :translate-factor="50" :spacer-enabled="true">
       <template #item-0>
         <div
           style="width: 200px; height: 120px; margin-right: 9px; background-color: #E91E63; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: white;">
@@ -149,10 +150,15 @@ const translateFactor = ref(50)
         <label>Translate factor:</label>
         <input type="number" v-model.number="translateFactor" min="0" max="100" />
       </div>
+      <div class="setting-item">
+        <label>Enable leading spacer:</label>
+        <input type="checkbox" v-model="spacerEnabled" />
+      </div>
     </div>
 
     <ScrollSlide :direction="direction" :itemGap="itemGap" :itemCount="itemCount"
-      :scale-start-percent="scaleStartPercent" :translate-factor="translateFactor" :style="direction === 'vertical'
+      :scale-start-percent="scaleStartPercent" :translate-factor="translateFactor" :spacer-enabled="spacerEnabled"
+      :style="direction === 'vertical'
         ? 'height: 600px; overflow-y: auto; border: 1px solid #999999;'
         : 'width: 100%; height: 200px; overflow-x: auto; border: 1px solid #999999;'">
       <template #item="{ index }">
