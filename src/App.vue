@@ -2,7 +2,6 @@
 import ScrollSlide from './components/ScrollSlide.vue'
 import { ref } from 'vue'
 
-// 为第二个示例添加设置
 const direction = ref('vertical')
 const itemGap = ref(9)
 const itemCount = ref(10)
