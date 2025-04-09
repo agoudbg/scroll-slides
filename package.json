@@ -1,6 +1,6 @@
 {
   "name": "scroll-slides",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "types": "./dist/index.d.ts",
   "files": [
@@ -8,6 +8,12 @@
   ],
   "main": "./dist/scroll-slides.umd.cjs",
   "module": "./dist/scroll-slides.js",
+  "author": {
+    "name": "agoudbg",
+    "email": "agoudbg@gmail.com",
+    "url": "https://github.com/agoudbg"
+  },
+  "homepage": "https://github.com/agoudbg/scroll-slides",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly --project tsconfig.app.json",
