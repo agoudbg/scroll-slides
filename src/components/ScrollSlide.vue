@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, watch, onUnmounted } from 'vue';
+import { ref, reactive, onMounted, computed, watch, onUnmounted, toRefs } from 'vue';
 
 // Define component props
 const props = defineProps({
@@ -24,16 +24,15 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
-  allowScrollToFirst: {
-    type: Boolean,
-    default: false,
-  },
-  // Updating prop name to be clearer
   spacerEnabled: {
     type: Boolean,
     default: false,
   },
 });
+
+const {
+  spacerEnabled,
+} = toRefs(props);
 
 // Configure slider container and items
 const sliderRef = ref<HTMLElement | null>(null);
@@ -191,6 +190,11 @@ onUnmounted(() => {
     sliderRef.value.removeEventListener('touchmove', handleScroll);
   }
   window.removeEventListener('resize', handleScroll);
+});
+
+// Handle scroll on spacer enabled change
+watch(spacerEnabled, () => {
+  handleScroll();
 });
 </script>
 
