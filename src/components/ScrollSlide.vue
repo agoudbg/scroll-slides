@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed, watch, onUnmounted, toRefs } from 'vue';
+import { ref, reactive, onMounted, computed, watch, onUnmounted, toRefs, nextTick } from 'vue';
 
 // Define component props
 const props = defineProps({
@@ -31,6 +31,11 @@ const props = defineProps({
 });
 
 const {
+  direction,
+  itemCount,
+  scaleRatio,
+  scaleStartPercent,
+  translateFactor,
   spacerEnabled,
 } = toRefs(props);
 
@@ -59,6 +64,11 @@ const ease = (t: number) => {
 
 // Generate index array for rendering items
 const itemIndices = computed(() => Array.from({ length: props.itemCount }, (_, i) => i));
+
+const handleUpdate = () => {
+  handleScroll();
+  updateSpacerSize();
+};
 
 // Handle scroll event
 const handleScroll = () => {
@@ -133,7 +143,7 @@ const initializeItems = () => {
     });
 
     // Trigger initial calculation
-    handleScroll();
+    handleUpdate();
   }
 };
 
@@ -146,7 +156,8 @@ watch(() => props.itemCount, (_newCount, _oldCount) => {
 }, { immediate: false });
 
 // Auto-calculate spacer size based on viewport, minus the first item height
-const spacerSize = computed(() => {
+const spacerSize = ref(0);
+const updateSpacerSize = () => {
   if (!sliderRef.value) return 0;
 
   const viewportSize = sliderRef.value[isVertical.value ? 'clientHeight' : 'clientWidth'];
@@ -163,20 +174,22 @@ const spacerSize = computed(() => {
 
   // The spacer should be the size of the viewport minus the first item's size
   // to allow precise positioning of the first element
-  return Math.max(0, viewportSize - firstItemSize);
-});
+  spacerSize.value = Math.max(0, viewportSize - firstItemSize);
+};
+
+updateSpacerSize();
 
 // Initialize after component is mounted
 onMounted(() => {
   if (sliderRef.value) {
     // Add scroll event listener
-    sliderRef.value.addEventListener('scroll', handleScroll);
+    sliderRef.value.addEventListener('scroll', handleUpdate);
 
     // Add resize event listener
-    window.addEventListener('resize', handleScroll);
+    window.addEventListener('resize', handleUpdate);
 
     // Add touch event listener for mobile devices
-    sliderRef.value.addEventListener('touchmove', handleScroll, { passive: true });
+    sliderRef.value.addEventListener('touchmove', handleUpdate, { passive: true });
 
     // Initialize items
     initializeItems();
@@ -186,15 +199,25 @@ onMounted(() => {
 // Clean up event listeners when component is unmounted
 onUnmounted(() => {
   if (sliderRef.value) {
-    sliderRef.value.removeEventListener('scroll', handleScroll);
-    sliderRef.value.removeEventListener('touchmove', handleScroll);
+    sliderRef.value.removeEventListener('scroll', handleUpdate);
+    sliderRef.value.removeEventListener('touchmove', handleUpdate);
   }
-  window.removeEventListener('resize', handleScroll);
+  window.removeEventListener('resize', handleUpdate);
 });
 
 // Handle scroll on spacer enabled change
-watch(spacerEnabled, () => {
-  handleScroll();
+watch([
+  direction,
+  itemCount,
+  scaleRatio,
+  scaleStartPercent,
+  translateFactor,
+  spacerEnabled,
+], () => {
+  console.log('Props changed, reinitializing items');
+  nextTick(() => {
+    handleUpdate();
+  });
 });
 </script>
 
