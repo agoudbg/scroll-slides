@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly --project tsconfig.app.json",
+    "build:demo": "vite build --config vite.demo.config.ts",
     "types": "vue-tsc --declaration --emitDeclarationOnly --project tsconfig.app.json",
     "preview": "vite preview"
   },
