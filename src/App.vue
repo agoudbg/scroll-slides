@@ -178,6 +178,20 @@ const spacerEnabled = ref(false)
           Item {{ index + 1 }}
         </div>
       </template>
+
+      <template #spacer>
+        <div :style="{
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#ffffff66',
+          boxShadow: '0 2px 10px #0000001a',
+          backdropFilter: 'blur(10px)',
+          webkitBackdropFilter: 'blur(10px)',
+          borderRadius: '15px',
+        }">
+          Spacer
+        </div>
+      </template>
     </ScrollSlide>
   </div>
 </template>

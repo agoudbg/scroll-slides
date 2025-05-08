@@ -227,6 +227,7 @@ watch([
     <div v-if="spacerEnabled" class="slider-spacer" :style="isVertical
       ? { height: `${spacerSize}px`, minHeight: `${spacerSize}px` }
       : { width: `${spacerSize}px`, minWidth: `${spacerSize}px`, display: 'inline-block' }">
+      <slot name="spacer" :size="spacerSize"></slot>
     </div>
 
     <div v-for="index in itemIndices" :key="index" class="slider-item" :style="{
@@ -258,6 +259,8 @@ watch([
 }
 
 .slider.horizontal {
+  display: flex;
+  align-items: center;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
@@ -279,6 +282,8 @@ watch([
 }
 
 .slider-spacer {
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 </style>
