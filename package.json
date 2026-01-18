@@ -22,14 +22,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "scroll-slides": "link:..\\..\\..\\AppData\\Local\\pnpm\\global\\5\\node_modules\\scroll-slides",
+    "vue": "^3.5.26"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@types/node": "^22.19.7",
+    "@vitejs/plugin-vue": "^5.2.4",
     "@vue/tsconfig": "^0.7.0",
-    "typescript": "~5.7.2",
-    "vite": "^6.2.0",
-    "vue-tsc": "^2.2.4"
+    "typescript": "~5.7.3",
+    "vite": "^6.4.1",
+    "vue-tsc": "^2.2.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "scroll-slides": "link:../../../AppData/Local/pnpm/global/5/node_modules/scroll-slides"
+    }
   }
 }
