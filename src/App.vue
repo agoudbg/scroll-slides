@@ -8,6 +8,7 @@ const itemCount = ref(10)
 const scaleStartPercent = ref(0.85)
 const translateFactor = ref(120)
 const spacerEnabled = ref(false)
+const occludeLowerItems = ref(false)
 </script>
 
 <template>
@@ -153,11 +154,15 @@ const spacerEnabled = ref(false)
         <label>Enable leading spacer:</label>
         <input type="checkbox" v-model="spacerEnabled" />
       </div>
+      <div class="setting-item">
+        <label>Occlude Lower Items:</label>
+        <input type="checkbox" v-model="occludeLowerItems" />
+      </div>
     </div>
 
     <ScrollSlide :direction="direction" :itemGap="itemGap" :itemCount="itemCount"
       :scale-start-percent="scaleStartPercent" :translate-factor="translateFactor" :spacer-enabled="spacerEnabled"
-      :style="direction === 'vertical'
+      :occlude-lower-items="occludeLowerItems" :style="direction === 'vertical'
         ? 'height: 600px; overflow-y: auto; border: 1px solid #999999;'
         : 'width: 100%; height: 200px; overflow-x: auto; border: 1px solid #999999;'">
       <template #item="{ index }">

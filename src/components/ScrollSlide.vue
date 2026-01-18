@@ -28,6 +28,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  occludeLowerItems: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const {
@@ -37,6 +41,7 @@ const {
   scaleStartPercent,
   translateFactor,
   spacerEnabled,
+  occludeLowerItems,
 } = toRefs(props);
 
 // Configure slider container and items
@@ -47,6 +52,7 @@ const itemStates = reactive<{
     scale: number,
     translate: number,
     opacity: number,
+    clipPath?: string,
   }
 }>({});
 
@@ -78,6 +84,10 @@ const handleScroll = () => {
 
   const container = sliderRef.value;
   const viewportSize = container[isVertical.value ? 'clientHeight' : 'clientWidth'];
+  const scrollPos = container[isVertical.value ? 'scrollTop' : 'scrollLeft'];
+
+  let prevItemVisualEnd = -Infinity;
+  let prevItemOpacity = 0;
 
   items.value.forEach((item, index) => {
     const rect = item.getBoundingClientRect();
@@ -111,11 +121,47 @@ const handleScroll = () => {
       opacity = ((0.6 - clampedTransformPercent) / 0.2);
     }
 
+    // Calculate clip path for occlusion
+    let clipPath: string | undefined;
+
+    // Calculate current item geometric properties for next iteration and current clipping
+    const size = isVertical.value ? item.offsetHeight : item.offsetWidth;
+    const offsetPos = isVertical.value ? item.offsetTop : item.offsetLeft;
+    const staticPos = offsetPos - scrollPos;
+
+    // Predicted visual position
+    // Center = staticPos + size/2 - (translate/100 * size)
+    // VisualStart = Center - (size * scale / 2)
+    //             = staticPos + size/2 - size * translate/100 - size * scale/2
+    //             = staticPos + size * (0.5 - translate/100 - scale/2)
+    const visualStart = staticPos + size * (0.5 - (translate / 100) - (scale / 2));
+    const visualEnd = visualStart + size * scale;
+
+    if (props.occludeLowerItems && index > 0) {
+      // If previous item is effectively visible, apply clip
+      if (prevItemOpacity > 0.05) {
+        const overlap = prevItemVisualEnd - visualStart;
+
+        if (overlap > 0.5 && scale > 0.01) {
+          const localOverlap = overlap / scale;
+          if (isVertical.value) {
+            clipPath = `inset(${localOverlap}px 0 0 0)`;
+          } else {
+            clipPath = `inset(0 0 0 ${localOverlap}px)`;
+          }
+        }
+      }
+    }
+
+    prevItemVisualEnd = visualEnd;
+    prevItemOpacity = opacity;
+
     // Update state
     itemStates[index] = {
       scale,
       translate,
       opacity,
+      clipPath,
     };
   });
 };
@@ -225,6 +271,7 @@ watch([
   scaleStartPercent,
   translateFactor,
   spacerEnabled,
+  occludeLowerItems,
 ], () => {
   console.log('Props changed, reinitializing items');
   nextTick(() => {
@@ -248,6 +295,7 @@ watch([
       <div class="slider-slot" :style="{
         transform: `${transformProperty}(${-itemStates[index]?.translate || 0}%) scale(${itemStates[index]?.scale || 1})`,
         opacity: itemStates[index]?.opacity,
+        clipPath: itemStates[index]?.clipPath,
       }">
         <!-- Try to use index-specific slot, fallback to generic item slot if not exist -->
         <slot :name="`item-${index}`" :index="index">
