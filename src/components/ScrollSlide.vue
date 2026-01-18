@@ -50,6 +50,8 @@ const itemStates = reactive<{
   }
 }>({});
 
+let resizeObserver: ResizeObserver | null = null;
+
 // Calculate style-related values
 const isVertical = computed(() => props.direction === 'vertical');
 const transformProperty = computed(() => isVertical.value ? 'translateY' : 'translateX');
@@ -181,23 +183,33 @@ updateSpacerSize();
 
 // Initialize after component is mounted
 onMounted(() => {
-  if (sliderRef.value) {
-    // Add scroll event listener
-    sliderRef.value.addEventListener('scroll', handleUpdate);
+  if (!sliderRef.value) return;
 
-    // Add resize event listener
-    window.addEventListener('resize', handleUpdate);
+  const container = sliderRef.value;
 
-    // Add touch event listener for mobile devices
-    sliderRef.value.addEventListener('touchmove', handleUpdate, { passive: true });
+  // Listen to size changes so initial layout gets a correct measurement
+  resizeObserver = new ResizeObserver(() => handleUpdate());
+  resizeObserver.observe(container);
 
-    // Initialize items
-    initializeItems();
-  }
+  // Add scroll event listener
+  container.addEventListener('scroll', handleUpdate);
+
+  // Add resize event listener
+  window.addEventListener('resize', handleUpdate);
+
+  // Add touch event listener for mobile devices
+  container.addEventListener('touchmove', handleUpdate, { passive: true });
+
+  // Initialize items once DOM is settled
+  initializeItems();
+  nextTick(() => requestAnimationFrame(handleUpdate));
 });
 
 // Clean up event listeners when component is unmounted
 onUnmounted(() => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+
   if (sliderRef.value) {
     sliderRef.value.removeEventListener('scroll', handleUpdate);
     sliderRef.value.removeEventListener('touchmove', handleUpdate);
