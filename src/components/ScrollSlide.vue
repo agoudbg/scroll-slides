@@ -3,31 +3,65 @@ import { ref, reactive, onMounted, computed, watch, onUnmounted, toRefs, nextTic
 
 // Define component props
 const props = defineProps({
+  /**
+   * Scrolling direction
+   * @default 'vertical'
+   * @values 'vertical', 'horizontal'
+   */
   direction: {
     type: String,
     default: 'vertical', // 'vertical' or 'horizontal'
     validator: (value: string) => ['vertical', 'horizontal'].includes(value),
   },
+  /**
+   * Total number of items in the list
+   * @default 0
+   */
   itemCount: {
     type: Number,
     default: 0,
   },
+  /**
+   * Scaling ratio
+   * The final scale of the item when it slides out
+   * @default 0.7
+   */
   scaleRatio: {
     type: Number,
     default: 0.7,
   },
+  /**
+   * Threshold percentage for scaling to start
+   * Range 0-1, defines where in the viewport the scaling animation begins
+   * @default 0.8
+   */
   scaleStartPercent: {
     type: Number,
     default: 0.8,
   },
+  /**
+   * Translation factor
+   * Adjusts the displacement offset during the slide-out effect
+   * @default 100
+   */
   translateFactor: {
     type: Number,
     default: 100,
   },
+  /**
+   * Whether to enable the spacer element
+   * If true, adds a spacer at the start to allow the first item to scroll out of view
+   * @default false
+   */
   spacerEnabled: {
     type: Boolean,
     default: false,
   },
+  /**
+   * Whether to occlude lower items
+   * If true, applies a clip-path to prevent visual overlap between scaled items
+   * @default false
+   */
   occludeLowerItems: {
     type: Boolean,
     default: false,
