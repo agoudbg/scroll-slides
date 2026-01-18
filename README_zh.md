@@ -1,24 +1,24 @@
 # scroll-slides
 
-English | [简体中文](./README_zh.md)
+[English](./README.md) | 简体中文
 
-A smooth and customizable scroll-based slide animation component for Vue 3. Create engaging scroll experiences with dynamic scaling, translation, and occlusion effects.
+一个流畅且可自定义的基于滚动的幻灯片动画组件，适用于 Vue 3。通过动态缩放、平移和遮挡效果创建引人入胜的滚动体验。
 
 ![npm version](https://img.shields.io/npm/v/scroll-slides.svg)
 ![license](https://img.shields.io/npm/l/scroll-slides.svg)
 
-## ✨ Features
+## ✨ 特性
 
-- 🎯 **Smooth Scroll Animations** - Transform items as they scroll with elegant scaling and translation effects
-- 📱 **Direction Support** - Both vertical and horizontal scrolling modes
-- 🎨 **Highly Customizable** - Fine-tune animation parameters to match your design
-- 🔄 **Dynamic Item Management** - Add or remove items on the fly
-- 📐 **Flexible Templates** - Use generic or per-item slot templates
-- 🚀 **Performance Optimized** - Efficient event handling and DOM updates
-- 💅 **TypeScript Support** - Full type definitions included
-- 🎭 **Occlusion Effects** - Optional lower item clipping for depth perception
+- 🎯 **流畅的滚动动画** - 随着滚动优雅地缩放和平移元素
+- 📱 **方向支持** - 支持垂直和水平滚动模式
+- 🎨 **高度可自定义** - 微调动画参数以匹配您的设计
+- 🔄 **动态项目管理** - 动态添加或删除项目
+- 📐 **灵活的模板** - 使用通用或单独的插槽模板
+- 🚀 **性能优化** - 高效的事件处理和 DOM 更新
+- 💅 **TypeScript 支持** - 包含完整的类型定义
+- 🎭 **遮挡效果** - 可选的下层项目裁剪以增强深度感
 
-## 📦 Installation
+## 📦 安装
 
 ```bash
 npm install scroll-slides
@@ -32,9 +32,9 @@ yarn add scroll-slides
 pnpm add scroll-slides
 ```
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-### Basic Usage
+### 基础用法
 
 ```vue
 <script setup>
@@ -49,7 +49,7 @@ import { ScrollSlide } from 'scroll-slides';
   >
     <template #item="{ index }">
       <div class="slide-item">
-        Slide {{ index + 1 }}
+        幻灯片 {{ index + 1 }}
       </div>
     </template>
   </ScrollSlide>
@@ -70,7 +70,7 @@ import { ScrollSlide } from 'scroll-slides';
 </style>
 ```
 
-### Horizontal Scrolling
+### 水平滚动
 
 ```vue
 <template>
@@ -84,7 +84,7 @@ import { ScrollSlide } from 'scroll-slides';
   >
     <template #item="{ index }">
       <div class="horizontal-item">
-        Item {{ index + 1 }}
+        项目 {{ index + 1 }}
       </div>
     </template>
   </ScrollSlide>
@@ -105,85 +105,85 @@ import { ScrollSlide } from 'scroll-slides';
 </style>
 ```
 
-### Independent Templates
+### 独立模板
 
-You can define unique content for each item using indexed slots:
+您可以使用索引插槽为每个项目定义独特的内容：
 
 ```vue
 <template>
   <ScrollSlide direction="vertical" :item-count="3">
     <template #item-0>
-      <div class="custom-item">🌸 First Item</div>
+      <div class="custom-item">🌸 第一项</div>
     </template>
     
     <template #item-1>
-      <div class="custom-item">🎨 Second Item</div>
+      <div class="custom-item">🎨 第二项</div>
     </template>
     
     <template #item-2>
-      <div class="custom-item">🚀 Third Item</div>
+      <div class="custom-item">🚀 第三项</div>
     </template>
   </ScrollSlide>
 </template>
 ```
 
-## 📖 API Reference
+## 📖 API 参考
 
-### Props
+### Props 属性
 
-| Prop | Type | Default | Description |
+| 属性 | 类型 | 默认值 | 描述 |
 |------|------|---------|-------------|
-| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` | Scrolling direction |
-| `itemCount` | `number` | `0` | Total number of items in the list |
-| `scaleRatio` | `number` | `0.7` | Final scale of the item when it slides out (0-1) |
-| `scaleStartPercent` | `number` | `0.8` | Threshold percentage for scaling to start (0-1) |
-| `translateFactor` | `number` | `100` | Adjusts the displacement offset during slide-out |
-| `spacerEnabled` | `boolean` | `false` | Adds a spacer at start to allow first item to scroll out |
-| `occludeLowerItems` | `boolean` | `false` | Applies clip-path to prevent visual overlap |
+| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` | 滚动方向 |
+| `itemCount` | `number` | `0` | 列表中的项目总数 |
+| `scaleRatio` | `number` | `0.7` | 项目滑出时的最终缩放比例 (0-1) |
+| `scaleStartPercent` | `number` | `0.8` | 开始缩放的阈值百分比 (0-1) |
+| `translateFactor` | `number` | `100` | 滑出期间的位移偏移调整 |
+| `spacerEnabled` | `boolean` | `false` | 在开始处添加占位符以允许第一项滚出 |
+| `occludeLowerItems` | `boolean` | `false` | 应用裁剪路径以防止视觉重叠 |
 
-### Slots
+### 插槽
 
-#### Default Item Slot
+#### 默认项目插槽
 
-Used when no specific item slot is defined:
+当没有定义特定项目插槽时使用：
 
 ```vue
 <template #item="{ index }">
-  <!-- Your content here -->
-  <!-- index: number - The zero-based index of the current item -->
+  <!-- 您的内容 -->
+  <!-- index: number - 当前项目的从零开始的索引 -->
 </template>
 ```
 
-#### Indexed Item Slots
+#### 索引项目插槽
 
-Define unique content for specific items:
+为特定项目定义独特的内容：
 
 ```vue
 <template #item-0>
-  <!-- Content for first item -->
+  <!-- 第一项的内容 -->
 </template>
 
 <template #item-1>
-  <!-- Content for second item -->
+  <!-- 第二项的内容 -->
 </template>
 ```
 
-**Note:** Indexed slots take priority over the generic `#item` slot.
+**注意：** 索引插槽优先于通用的 `#item` 插槽。
 
-#### Spacer Slot
+#### 占位符插槽
 
-Customize the spacer element (when `spacerEnabled` is `true`):
+自定义占位符元素（当 `spacerEnabled` 为 `true` 时）：
 
 ```vue
 <template #spacer="{ size }">
-  <!-- size: number - The calculated size of the spacer in pixels -->
-  <div>Custom Spacer Content</div>
+  <!-- size: number - 占位符的计算大小（像素） -->
+  <div>自定义占位符内容</div>
 </template>
 ```
 
-## 🎨 Customization Examples
+## 🎨 自定义示例
 
-### Subtle Animation
+### 微妙动画
 
 ```vue
 <ScrollSlide
@@ -193,12 +193,12 @@ Customize the spacer element (when `spacerEnabled` is `true`):
   :item-count="10"
 >
   <template #item="{ index }">
-    <!-- Your content -->
+    <!-- 您的内容 -->
   </template>
 </ScrollSlide>
 ```
 
-### Dramatic Effect
+### 戏剧效果
 
 ```vue
 <ScrollSlide
@@ -209,12 +209,12 @@ Customize the spacer element (when `spacerEnabled` is `true`):
   :item-count="10"
 >
   <template #item="{ index }">
-    <!-- Your content -->
+    <!-- 您的内容 -->
   </template>
 </ScrollSlide>
 ```
 
-### Horizontal Card Carousel
+### 水平卡片轮播
 
 ```vue
 <ScrollSlide
@@ -228,15 +228,15 @@ Customize the spacer element (when `spacerEnabled` is `true`):
 >
   <template #item="{ index }">
     <div class="card">
-      Card {{ index + 1 }}
+      卡片 {{ index + 1 }}
     </div>
   </template>
 </ScrollSlide>
 ```
 
-## 🔧 Advanced Usage
+## 🔧 高级用法
 
-### Dynamic Item Count
+### 动态项目数量
 
 ```vue
 <script setup>
@@ -256,19 +256,19 @@ const removeItem = () => {
 
 <template>
   <div>
-    <button @click="addItem">Add Item</button>
-    <button @click="removeItem">Remove Item</button>
+    <button @click="addItem">添加项目</button>
+    <button @click="removeItem">删除项目</button>
     
     <ScrollSlide :item-count="items.length">
       <template #item="{ index }">
-        <div>Item {{ items[index] }}</div>
+        <div>项目 {{ items[index] }}</div>
       </template>
     </ScrollSlide>
   </div>
 </template>
 ```
 
-### Responsive Configuration
+### 响应式配置
 
 ```vue
 <script setup>
@@ -298,70 +298,70 @@ onUnmounted(() => window.removeEventListener('resize', updateWidth));
       : 'width: 100%; overflow-x: auto;'"
   >
     <template #item="{ index }">
-      <!-- Responsive content -->
+      <!-- 响应式内容 -->
     </template>
   </ScrollSlide>
 </template>
 ```
 
-## 💡 Tips & Best Practices
+## 💡 技巧与最佳实践
 
-1. **Container Styling**: Always set explicit dimensions and overflow properties on the ScrollSlide container:
+1. **容器样式**：始终在 ScrollSlide 容器上设置明确的尺寸和溢出属性：
    ```vue
    <ScrollSlide style="height: 600px; overflow-y: auto;">
    ```
 
-2. **Item Spacing**: Add margins to your item content, not the slot wrapper:
+2. **项目间距**：将边距添加到项目内容，而不是插槽包装器：
    ```css
    .my-item {
-     margin-bottom: 10px; /* for vertical */
-     margin-right: 10px;  /* for horizontal */
+     margin-bottom: 10px; /* 垂直方向 */
+     margin-right: 10px;  /* 水平方向 */
    }
    ```
 
-3. **Performance**: For large lists, consider using virtual scrolling techniques in combination with scroll-slides.
+3. **性能**：对于大列表，考虑结合虚拟滚动技术使用 scroll-slides。
 
-4. **Z-Index**: Items are automatically z-indexed in reverse order (first item on top). Plan your designs accordingly.
+4. **Z-Index**：项目自动按逆序设置 z-index（第一项在顶部）。请相应地规划您的设计。
 
-5. **Spacer Usage**: Enable `spacerEnabled` when you want the first item to be able to scroll to the center/top of the viewport.
+5. **占位符用法**：当您希望第一项能够滚动到视口中心/顶部时，启用 `spacerEnabled`。
 
-## 🛠️ Development
+## 🛠️ 开发
 
 ```bash
-# Clone the repository
+# 克隆仓库
 git clone https://github.com/agoudbg/scroll-slides.git
 
-# Install dependencies
+# 安装依赖
 pnpm install
 
-# Run development server
+# 运行开发服务器
 pnpm dev
 
-# Build library
+# 构建库
 pnpm build
 
-# Build demo
+# 构建演示
 pnpm build:demo
 ```
 
-## 📄 License
+## 📄 许可证
 
-MIT License - see [LICENSE](LICENSE) file for details
+MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
 
-## 🤝 Contributing
+## 🤝 贡献
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/agoudbg/scroll-slides/issues).
+欢迎贡献、提出问题和功能请求！请随时查看 [issues 页面](https://github.com/agoudbg/scroll-slides/issues)。
 
-## 👤 Author
+## 👤 作者
 
 **agoudbg**
 - GitHub: [@agoudbg](https://github.com/agoudbg)
 - Email: agoudbg@gmail.com
 
-## 🌟 Show Your Support
+## 🌟 支持我们
 
-Give a ⭐️ if this project helped you!
+如果这个项目对您有帮助，请给一个 ⭐️！
 
 ---
 
-Made with ❤️ using Vue 3 and TypeScript
+使用 Vue 3 和 TypeScript 用 ❤️ 制作

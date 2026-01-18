@@ -13,6 +13,7 @@
     "email": "agoudbg@gmail.com",
     "url": "https://github.com/agoudbg"
   },
+  "license": "MIT",
   "homepage": "https://github.com/agoudbg/scroll-slides",
   "scripts": {
     "dev": "vite",
