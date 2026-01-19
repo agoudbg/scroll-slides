@@ -1,5 +1,6 @@
 {
   "name": "scroll-slides",
+  "description": "Lightweight Vue 3 component for smooth, scroll-driven slide transitions",
   "version": "0.3.0",
   "type": "module",
   "types": "./dist/index.d.ts",
